@@ -3,10 +3,40 @@ import static org.junit.Assert.*;
 
 public class RestaurantTest {
 
+	public static final Dish VEGI_1 = new Dish("Vegi_1", "Desc_1", true);
+	public static final Dish VEGI_2 = new Dish("Vegi_2", "Desc_2", true);
+	public static final Dish VEGI_3 = new Dish("Vegi_3", "Desc_3", true);
+	public static final Dish VEGI_4 = new Dish("Vegi_4", "Desc_4", true);
+	public static final Dish VEGI_5 = new Dish("Vegi_5", "Desc_5", true);
+
+	public static final Dish NORM_1 = new Dish("Norm_1", "Desc_1", false);
+	public static final Dish NORM_2 = new Dish("Norm_2", "Desc_2", false);
+	public static final Dish NORM_3 = new Dish("Norm_3", "Desc_3", false);
+	public static final Dish NORM_4 = new Dish("Norm_4", "Desc_4", false);
+	public static final Dish NORM_5 = new Dish("Norm_5", "Desc_5", false);
+
 	public static final String DEFAULT_RESTAURANT_NAME = "McDonalds";
 	public static final String DEFAULT_RESTAURANT_ADRESS = "Rua da comida, 4º Esquerdo";
 	public static final List<Dish> DEFAULT_RESTAURANT_DISHES = new List<Dish>();
 	public static final int[] DEFAULT_DISH_PRICES = {};
+
+	@Rule 
+	public ExpectedException thrown = ExpectedException.none();
+
+	@Test
+	public void testSetVegetarianToTrueWithOnlyVegiDishes(){
+		Restaurant vegiRestaurant = new Restaurante();
+		vegiRestaurant.setVegetarian(true);
+		assertTrue("Restaurant is not vegitarian", vegiRestaurant.isVegetarian());
+	}
+
+	@Test
+	public void testSetVegetarianToTrueWithMultipleDishTypes(){
+		Restaurant notVegiOnlyRestaurant = new Restaurante();
+		vegiRestaurant.setVegetarian(true);
+		thrown.expected(InvalidInvocationException.class);
+		assertFalse("Restaurant is vegetarian and has other types of food", vegiRestaurant.isVegetarian());
+	}
 
 }
 

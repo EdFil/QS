@@ -7,6 +7,8 @@ public class DishTest {
 	public static final String DEFAULT_DISH_DESCRIPTION = "Very spicy and italian";
 	public static final bool DEFAULT_DISH_IS_VEGITARIAN = false;
 
+
+	//Isto assim está mal porque o restaurante tem que ter no minimo 5 pratos.
 	public static final String DEFAULT_RESTAURANT_NAME = "McDonalds";
 	public static final String DEFAULT_RESTAURANT_ADRESS = "Food Street, after the tree";
 	public static final List<Dish> DEFAULT_RESTAURANT_DISHES = new List<Dish>();

@@ -16,18 +16,14 @@ public class RestaurantTest {
 	public static final Dish NORM_5 = new Dish("Norm_5", "Desc_5", false);
 
 	public static final String DEFAULT_RESTAURANT_NAME = "McDonalds";
-	public static final String DEFAULT_RESTAURANT_ADRESS = "Rua da comida, 4º Esquerdo";
-	public static final List<Dish> DEFAULT_RESTAURANT_DISHES = new List<Dish>();
-	public static final int[] DEFAULT_DISH_PRICES = {};
-
-	@Rule 
-	public ExpectedException thrown = ExpectedException.none();
+	public static final String DEFAULT_RESTAURANT_ADRESS = "Food Street, after the tree";
 
 	@Test
-	public void testSetVegetarianToTrueWithOnlyVegiDishes(){
-		Restaurant vegiRestaurant = new Restaurante();
-		vegiRestaurant.setVegetarian(true);
-		assertTrue("Restaurant is not vegitarian", vegiRestaurant.isVegetarian());
+	public void testCase1(){
+		List<Dish> dishList = Arrays.asList(NORM_1, NORM_2, NORM_3, NORM_4, NORM_5);
+		int[] dishPrices = new int[] { 10, 20, 30 ,40, 50 };
+		Restaurant vegiRestaurant = new Restaurante(DEFAULT_RESTAURANT_NAME, DEFAULT_RESTAURANT_ADRESS, dishList, dishPrices);
+
 	}
 
 	@Test

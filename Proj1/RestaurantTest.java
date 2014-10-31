@@ -19,19 +19,17 @@ public class RestaurantTest {
 	public static final String DEFAULT_RESTAURANT_ADRESS = "Food Street, after the tree";
 
 	@Test
-	public void testCase1(){
+	public void testCase1TestingConstructorWithValidData(){
 		List<Dish> dishList = Arrays.asList(NORM_1, NORM_2, NORM_3, NORM_4, NORM_5);
-		int[] dishPrices = new int[] { 10, 20, 30 ,40, 50 };
+		int[] dishPrices = new int[] { 22, 20, 30 ,40, 50 };
 		Restaurant vegiRestaurant = new Restaurante(DEFAULT_RESTAURANT_NAME, DEFAULT_RESTAURANT_ADRESS, dishList, dishPrices);
-
-	}
-
-	@Test
-	public void testSetVegetarianToTrueWithMultipleDishTypes(){
-		Restaurant notVegiOnlyRestaurant = new Restaurante();
-		vegiRestaurant.setVegetarian(true);
-		thrown.expected(InvalidInvocationException.class);
-		assertFalse("Restaurant is vegetarian and has other types of food", vegiRestaurant.isVegetarian());
+		assertEquals("Restaurant name is not OK", DEFAULT_RESTAURANT_NAME, restaurant.getName());
+		assertEquals("Restaurant address is not OK", DEFAULT_RESTAURANT_ADRESS, restaurant.getAdress());
+		assertEquals("Restaurant should not be Vegetarian by default", false, restaurant.isVegetarian());
+		for(int i = 0; i < dishList.size; i++){
+			assertEquals("Dish " + i + " is not OK", dishList.get(i), restaurant.getDishes().getDish(i));
+			assertEquals("Price " + i + " is not OK", dishPrices.get(i), getPrice(dishList.get(i)));
+		}
 	}
 
 }
@@ -54,7 +52,7 @@ public class Restaurant {
 	//removes the dish from this restaurant //throws DishNotFoundException if dish does not exist in this restaurant 
 	public void remove(Dish dish) { /* .... */ }
 	//returns the price of the dish in this restaurant //throws DishNotFoundException if dish does not exist in this restaurant 
-	public int getprice(Dish dish) { /* .... */ }
+	public int getPrice(Dish dish) { /* .... */ }
 	//returns the list of dishes of this restaurant 
 	public List<Dish> getDishes() { /* .... */ }
 }

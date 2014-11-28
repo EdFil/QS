@@ -5,19 +5,22 @@
 MACHINE
     Rest
 INCLUDES
-    Restaurant,
-    Dish,
-    ShoppingTray
-SETS
-    DISHES; RESTAURANTS; TRAYS; CLIENTS
-VARIABLES
-    dishes, restaurants, trays, clients
-INVARIANT
-    dishes <: DISHES &
-    restaurants <: RESTAURANTS &
-    trays <: TRAYS &
-    clients <: CLIENTS
-INITIALISATION
-    dishes := {} || restaurants := {} || trays := {} || clients := {}
+    Restaurant,Dish,ShoppingTray
+CONSTANTS
+    maxPrice
+PROPERTIES
+    maxPrice : NAT
+OPERATIONS
+    newDish(name, desc, isVeg) = 
+    PRE name : NAMES & desc : DESCRIPTIONS & isVeg : DISHTYPES
+    THEN
+        ANY dish
+        WHERE
+            dish : DISHES & dish /: createdDishes
+        THEN
+            registerDish(name, desc, isVeg, dish)
+        END
+    END;
+
 
 END

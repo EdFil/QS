@@ -7,15 +7,16 @@ MACHINE
 SEES
     Dish
 SETS
-    RESTAURANTS; RESTNAMES; RESTADDRESSES     
+    RESTAURANTS; RESTNAMES; RESTADDRESSES; RESTAURANTTYPES = {VEGI, NVEGI}   
 VARIABLES
-    createdRestaurants, restaurantNames, restaurantAddresses, menu
+    createdRestaurants, restaurantNames, restaurantAddresses, restaurantVegetarian, menu
 INVARIANT
     createdRestaurants <: RESTAURANTS &
     restaurantNames : createdRestaurants --> RESTNAMES &
     restaurantAddresses : createdRestaurants --> RESTADDRESSES &
+    restaurantVegetarian : createdRestaurants --> RESTAURANTTYPES &
     menu : DISHES --> NAT1 & card(menu) >= 5 & card(menu) <= 15
 INITIALISATION
     menu := {} || createdRestaurants := {} || 
-    restaurantNames := {} || restaurantAddresses := {}
+    restaurantNames := {} || restaurantAddresses := {} || restaurantVegetarian := {}
 END

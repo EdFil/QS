@@ -48,6 +48,7 @@ public class RestaurantTest {
 		int[] dishPrices = new int[] { 10, 12, 132, 53, 32, 1, 34 };
 		Restaurant restaurant = new Restaurante(DEFAULT_RESTAURANT_NAME, DEFAULT_RESTAURANT_ADRESS, dishList, dishPrices);
 		restaurant.addDish(NORM_2, 0);
+		dishPrices[1] = 0;
 		for(int i = 0; i < dishList.size; i++){
 			assertEquals("Price " + i + " is not OK", dishPrices.get(i), getPrice(dishList.get(i)));
 			assertEquals("Dish " + i + " is not OK", dishList.get(i), restaurant.getDishes().getDish(i));

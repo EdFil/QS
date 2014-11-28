@@ -74,7 +74,7 @@ public class RestaurantTest {
 		Restaurant restaurant = new Restaurante(DEFAULT_RESTAURANT_NAME, DEFAULT_RESTAURANT_ADRESS, dishList, dishPrices);
 		try {
 			restaurant.setVegetarian(true);
-			fail("Cannot have a vegetaria restaurant with non vegetarian food");
+			fail("Cannot have a vegetarian restaurant with non vegetarian food");
 		} catch(InvalidInvocationException e) {
 			assertFalse("Restaurant should not have changed to vegitarian", restaurant.isVegetarian());
 		}

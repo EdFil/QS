@@ -5,5 +5,13 @@
 MACHINE
     Dish
 SETS
-    NAMES; DESCRIPTIONS
+    DISHES; DESCRIPTIONS; NAMES
+VARIABLES
+    createdDishes, dishNames, dishDescriptions
+INVARIANT
+    createdDishes <: DISHES &
+    dishNames : createdDishes --> NAMES &
+    dishDescriptions : createdDishes --> DESCRIPTIONS
+INITIALISATION
+    createdDishes := {} || dishNames := {} || dishDescriptions := {}
 END

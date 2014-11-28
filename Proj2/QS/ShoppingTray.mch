@@ -4,5 +4,7 @@
  */
 MACHINE
     ShoppingTray
+SEES
+    Dish
 
 END

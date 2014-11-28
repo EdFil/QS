@@ -4,7 +4,7 @@
  */
 MACHINE
     Rest
-SEES
+INCLUDES
     Restaurant,
     Dish,
     ShoppingTray
@@ -19,10 +19,5 @@ INVARIANT
     clients <: CLIENTS
 INITIALISATION
     dishes := {} || restaurants := {} || trays := {} || clients := {}
-OPERATIONS
-    newDish(name, desc, isVegi) =
-    PRE isVegi : BOOL & name : NAMES & desc : DESCRIPTIONS
-    THEN dishes := dishes \/ { name, desc, isVegi }
-    END;
 
 END

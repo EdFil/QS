@@ -29,7 +29,7 @@ OPERATIONS
         result := bool(ID : createdRestaurants)
     END;
     
-    result <-- dishNotInMenu(dishID) =
+    result <-- dishInMenu(dishID) =
     PRE
         dishID : DISHES
     THEN

@@ -16,13 +16,26 @@ OPERATIONS
     THEN
         ANY dish
         WHERE
-            dish <: DISHES & 
+            dish : DISHES & 
             checkDishID(dish) = FALSE & 
             checkRestaurantID(dish) = FALSE &
             checkTrayID(dish) = FALSE &
             checkClientID(dish) = FALSE
         THEN
             registerDish(name, desc, isVeg, dish)
+        END
+    END;
+    
+    // ver se o cliente pode ter apenas uma tray
+    newTray(cc) =
+    PRE cc : CLIENTS
+    THEN
+        ANY tray
+        WHERE
+            tray : TRAYS &
+            checkTrayID(tray) = FALSE 
+        THEN
+            registerTray(cc,tray)
         END
     END;
     
@@ -59,11 +72,31 @@ OPERATIONS
     res <-- isRestaurantVegetarian(rr) =
     PRE rr : RESTAURANTS
     THEN
-        IF restaurantVegetarian(rr) = {VEGI}
-        THEN res := TRUE
-        ELSE res := FALSE
-        END
+        res := restaurantVegetarian(rr) 
     END;
-            
+    
+    setVegetarianRestaurant(rr,bb) =
+    PRE rr : RESTAURANTS & bb : BOOL
+    THEN
+        restaurantVegetarian(rr) := bb
+    END;
+    
+    addDishToTray(tr,dd) =
+    PRE tr : TRAYS & dd : DISHES
+    THEN
+        addDish(tr,dd)
+    END;
+    
+//    ldd <-- getDishRestaurant(rr) =
+//    PRE rr : RESTAURANTS 
+//    THEN
+//        ldd := menus(createdRestaurants(rr))
+//    END;
+    
+//    pp <-- getDishPrice(rr, dd) =
+//    PRE rr : RESTAURANTS & dd : DISHES & dishInMenu(dd) = TRUE
+//    THEN
+//        pp := menuPrices(menus(dd))
+//    END;
 
 END

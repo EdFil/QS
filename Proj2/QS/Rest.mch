@@ -16,7 +16,7 @@ OPERATIONS
     THEN
         ANY dish
         WHERE
-            dish : DISHES & 
+            dish <: DISHES & 
             checkDishID(dish) = FALSE & 
             checkRestaurantID(dish) = FALSE &
             checkTrayID(dish) = FALSE &
@@ -26,10 +26,52 @@ OPERATIONS
         END
     END;
     
+
     removeDish(dd) =
     PRE 
         dd : DISHES & dishNotInMenu(dd) = TRUE
     THEN
         deleteDish(dd)
     END;  
+
+    name <-- getDishName(dd) =
+    PRE dd : DISHES
+    THEN
+        name := dishNames(dd) 
+    END;
+    
+    desc <-- getDishDescription(dd) =
+    PRE dd : DISHES
+    THEN
+        desc := dishDescriptions(dd)
+    END;
+
+    bb <--isVegetarianDish(dd) =
+    PRE dd : DISHES
+    THEN
+        bb := dishVegetarian(dd)
+    END;
+    
+    name <-- getRestaurantName(rr) =
+    PRE rr : RESTAURANTS
+    THEN
+        name := restaurantNames(rr)
+    END;
+    
+    addr <-- getRestaurantAddress(rr) =
+    PRE rr : RESTAURANTS
+    THEN
+        addr := restaurantAddresses(rr)
+    END;
+    
+    res <-- isRestaurantVegetarian(rr) =
+    PRE rr : RESTAURANTS
+    THEN
+        IF restaurantVegetarian(rr) = {VEGI}
+        THEN res := TRUE
+        ELSE res := FALSE
+        END
+    END;
+            
+
 END

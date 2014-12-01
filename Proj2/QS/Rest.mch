@@ -35,6 +35,19 @@ OPERATIONS
     END; 
  
 
+    // ver se o cliente pode ter apenas uma tray
+    newTray(cc) =
+    PRE cc : CLIENTS
+    THEN
+        ANY tray
+        WHERE
+            tray : TRAYS &
+            checkTrayID(tray) = FALSE 
+        THEN
+            registerTray(cc,tray)
+        END
+    END;
+    
     name <-- getDishName(dd) =
     PRE dd : DISHES
     THEN
@@ -70,10 +83,34 @@ OPERATIONS
     END;
 
     
-    res <-- isVegetarian(rr) =
+    res <-- isVegetarianRestaurant(rr) =
     PRE rr : RESTAURANTS
     THEN
         res := restaurantVegetarian(rr) 
-    END;          
+    END;
+    
+    setVegetarianRestaurant(rr,bb) =
+    PRE rr : RESTAURANTS & bb : BOOL
+    THEN
+        restaurantVegetarian(rr) := bb
+    END;
+    
+    addDishToTray(tr,dd) =
+    PRE tr : TRAYS & dd : DISHES
+    THEN
+        addDish(tr,dd)
+    END;
+    
+//    ldd <-- getDishRestaurant(rr) =
+//    PRE rr : RESTAURANTS 
+//    THEN
+//        ldd := menus(createdRestaurants(rr))
+//    END;
+    
+//    pp <-- getDishPrice(rr, dd) =
+//    PRE rr : RESTAURANTS & dd : DISHES & dishInMenu(dd) = TRUE
+//    THEN
+//        pp := menuPrices(menus(dd))
+//    END;
 
 END

@@ -37,6 +37,10 @@ OPERATIONS
         dishVegetarian(dishID) := isVeg
     END;
     
-    
-  
+    deleteDish(dishID) =
+    PRE
+        dishID : DISHES & dishID : createdDishes
+    THEN
+        createdDishes := createdDishes - {dishID}
+    END;  
 END

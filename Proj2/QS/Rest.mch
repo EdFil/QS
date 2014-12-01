@@ -26,6 +26,14 @@ OPERATIONS
         END
     END;
     
+
+    removeDish(dd) =
+    PRE 
+        dd : DISHES & dishNotInMenu(dd) = TRUE
+    THEN
+        deleteDish(dd)
+    END;  
+
     // ver se o cliente pode ter apenas uma tray
     newTray(cc) =
     PRE cc : CLIENTS

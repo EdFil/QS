@@ -15,7 +15,8 @@ INVARIANT
     createdTrays <: TRAYS &
     status : createdTrays --> STATUS &
     numberOfDishes : NAT & numberOfDishes >= 0 &
-    trayCost : NAT & trayCost >= 0
+    trayCost : NAT &
+    trayCost >= 0
 INITIALISATION
     createdClients := {} ||
     createdTrays := {} ||

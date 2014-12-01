@@ -29,11 +29,21 @@ OPERATIONS
         result := bool(ID : createdRestaurants)
     END;
     
-    result <-- dishNotInMenu(dishID) =
+    result <-- dishInMenu(dishID) =
     PRE
         dishID : DISHES
     THEN
         result := bool(dishID : ran(menus))
+    END;
+
+
+    result <-- getPrice(rr, dd) =
+    PRE 
+        rr : RESTAURANTS & dd : DISHES
+    THEN
+        // result := menuPrices({rr} * {dd})
+        result := menuPrices(menus(rr))
+        result := ran(({rr} <| menus /\ menus |> {dd} ) <| menuPrices)
     END;
         
 END

@@ -25,6 +25,9 @@ OPERATIONS
             registerDish(name, desc, isVeg, dish)
         END
     END;
+    
+/*    removeDish(dish) =
+    PRE dish : DISHES & */
 
 
 END

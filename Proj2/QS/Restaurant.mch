@@ -19,4 +19,10 @@ INVARIANT
 INITIALISATION
     menu := {} || createdRestaurants := {} || 
     restaurantNames := {} || restaurantAddresses := {} || restaurantVegetarian := {}
+OPERATIONS
+    result <-- checkRestaurantID(ID) =
+    PRE ID : RESTAURANTS
+    THEN
+        result := bool(ID : createdRestaurants)
+    END;
 END

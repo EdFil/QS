@@ -5,18 +5,22 @@
 MACHINE
     Rest
 INCLUDES
-    Restaurant,Dish,ShoppingTray
+    Restaurant, Dish, ShoppingTray
 CONSTANTS
     maxPrice
 PROPERTIES
     maxPrice : NAT
 OPERATIONS
     newDish(name, desc, isVeg) = 
-    PRE name : NAMES & desc : DESCRIPTIONS & isVeg : DISHTYPES
+    PRE name : NAMES & desc : DESCRIPTIONS & isVeg : BOOL
     THEN
         ANY dish
         WHERE
-            dish : DISHES & dish /: createdDishes
+            dish : DISHES & 
+            checkDishID(dish) = FALSE & 
+            checkRestaurantID(dish) = FALSE &
+            checkTrayID(dish) = FALSE &
+            checkClientID(dish) = FALSE
         THEN
             registerDish(name, desc, isVeg, dish)
         END

@@ -26,8 +26,10 @@ OPERATIONS
         END
     END;
     
-/*    removeDish(dish) =
-    PRE dish : DISHES & */
-
-
+    removeDish(dd) =
+    PRE 
+        dd : DISHES & dishNotInMenu(dd) = TRUE
+    THEN
+        deleteDish(dd)
+    END;  
 END

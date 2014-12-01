@@ -11,6 +11,7 @@ CONSTANTS
 PROPERTIES
     maxPrice : NAT
 OPERATIONS
+    //////////////////////////////////// DISH OPERATIONS ////////////////////////////////
     newDish(name, desc, isVeg) = 
     PRE name : NAMES & desc : DESCRIPTIONS & isVeg : BOOL
     THEN
@@ -34,19 +35,6 @@ OPERATIONS
         deleteDish(dd)
     END; 
  
-
-    // ver se o cliente pode ter apenas uma tray
-    newTray(cc) =
-    PRE cc : CLIENTS
-    THEN
-        ANY tray
-        WHERE
-            tray : TRAYS &
-            checkTrayID(tray) = FALSE 
-        THEN
-            registerTray(cc,tray)
-        END
-    END;
     
     name <-- getDishName(dd) =
     PRE dd : DISHES
@@ -68,6 +56,21 @@ OPERATIONS
         bb := dishVegetarian(dd)
     END;
 
+   
+   //////////////////////////////////////// RESTAURANT OPERATIONS /////////////////////////////////
+    setVegetarianRestaurant(rr,bb) =
+    PRE rr : RESTAURANTS & bb : BOOL
+    THEN
+        restaurantVegetarian(rr) := bb
+    END;
+    
+    
+    res <-- isVegetarianRestaurant(rr) =
+    PRE rr : RESTAURANTS
+    THEN
+        res := restaurantVegetarian(rr) 
+    END;
+    
     
     name <-- getRestaurantName(rr) =
     PRE rr : RESTAURANTS
@@ -81,19 +84,35 @@ OPERATIONS
     THEN
         addr := restaurantAddresses(rr)
     END;
+    
+    
+    ldd <-- getDishRestaurant(rr) =
+    PRE rr : RESTAURANTS 
+    THEN
+        ldd := menus(rr)
+    END;
+    
+//    pp <-- getDishPrice(rr, dd) =
+//    PRE rr : RESTAURANTS & dd : DISHES & dishInMenu(dd) = TRUE
+//    THEN
+//        pp := menuPrices(menus(dd))
+//    END;
 
     
-    res <-- isVegetarianRestaurant(rr) =
-    PRE rr : RESTAURANTS
+    ///////////////////////////////////// TRAY OPERATIONS ///////////////////////////////////////
+        // ver se o cliente pode ter apenas uma tray
+    newTray(cc) =
+    PRE cc : CLIENTS
     THEN
-        res := restaurantVegetarian(rr) 
+        ANY tray
+        WHERE
+            tray : TRAYS &
+            checkTrayID(tray) = FALSE 
+        THEN
+            registerTray(cc,tray)
+        END
     END;
     
-    setVegetarianRestaurant(rr,bb) =
-    PRE rr : RESTAURANTS & bb : BOOL
-    THEN
-        restaurantVegetarian(rr) := bb
-    END;
     
     addDishToTray(tr,dd) =
     PRE tr : TRAYS & dd : DISHES
@@ -101,16 +120,6 @@ OPERATIONS
         addDish(tr,dd)
     END;
     
-//    ldd <-- getDishRestaurant(rr) =
-//    PRE rr : RESTAURANTS 
-//    THEN
-//        ldd := menus(createdRestaurants(rr))
-//    END;
-    
-//    pp <-- getDishPrice(rr, dd) =
-//    PRE rr : RESTAURANTS & dd : DISHES & dishInMenu(dd) = TRUE
-//    THEN
-//        pp := menuPrices(menus(dd))
-//    END;
+
 
 END

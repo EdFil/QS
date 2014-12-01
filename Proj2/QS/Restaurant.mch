@@ -36,14 +36,15 @@ OPERATIONS
         result := bool(dishID : ran(menus))
     END;
 
-
+    
     result <-- getPrice(rr, dd) =
     PRE 
         rr : RESTAURANTS & dd : DISHES
     THEN
-        // result := menuPrices({rr} * {dd})
-        result := menuPrices(menus(rr))
-        result := ran(({rr} <| menus /\ menus |> {dd} ) <| menuPrices)
+        result := TRUE
+       // result := menuPrices({rr} * {dd})
+       // result := menuPrices(menus(rr))
+       // result := ran(({rr} <| menus /\ menus |> {dd} ) <| menuPrices)
     END;
         
 END

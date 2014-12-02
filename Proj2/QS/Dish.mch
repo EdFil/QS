@@ -10,7 +10,7 @@ VARIABLES
     createdDishes, dishNames, dishDescriptions, dishVegetarian
 INVARIANT
     createdDishes <: DISHES &
-    dishNames : createdDishes --> NAMES &
+    dishNames : createdDishes >-> NAMES &
     dishDescriptions : createdDishes --> DESCRIPTIONS &
     dishVegetarian : createdDishes --> BOOL
 INITIALISATION
@@ -22,18 +22,25 @@ OPERATIONS
         result := bool(ID : createdDishes)
     END;
     
-    registerDish(name, desc, isVeg, dishId) =
+    registerDish(name, desc, isVeg, dishID) =
     PRE
         name : NAMES &
         desc : DESCRIPTIONS &
         isVeg : BOOL &
-        dishId <: DISHES &
-        dishId /\ createdDishes = {}
+        dishID : DISHES &
+        dishID /: createdDishes
     THEN
-        createdDishes := createdDishes \/ dishId ||
-        dishNames(dishId) := name ||
-        dishDescriptions(dishId) := desc ||
-        dishVegetarian(dishId) := isVeg
+        dishID :: createdDishes ||
+        //createdDishes := createdDishes \/ {dishID} ||
+        dishNames(dishID) := name ||
+        dishDescriptions(dishID) := desc ||
+        dishVegetarian(dishID) := isVeg
     END;
-  
+    
+    deleteDish(dishID) =
+    PRE
+        dishID : DISHES & dishID : createdDishes
+    THEN
+        createdDishes := createdDishes - {dishID}
+    END;  
 END

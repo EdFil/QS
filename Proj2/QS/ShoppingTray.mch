@@ -9,16 +9,23 @@ SEES
 SETS
     TRAYS; CLIENTS; STATUS = {OPEN, CLOSED, PAID}
 VARIABLES
-    createdTrays, status, numberOfDishes, trayCost, createdClients
+    createdTrays, status, numberOfDishes, trayCost, createdClients, clientTrays, dishes, trayDishes
 INVARIANT
+    dishes <: DISHES &
     createdClients <: CLIENTS &
     createdTrays <: TRAYS &
+    clientTrays : createdTrays --> createdClients & 
+    trayDishes : createdTrays --> dishes &
     status : createdTrays --> STATUS &
     numberOfDishes : NAT & numberOfDishes >= 0 &
-    trayCost : NAT & trayCost >= 0
+    trayCost : NAT &
+    trayCost >= 0
 INITIALISATION
+    dishes := {} ||
+    trayDishes := {} ||
     createdClients := {} ||
     createdTrays := {} ||
+    clientTrays := {} ||
     status := createdTrays * {OPEN} ||
     numberOfDishes := 0 ||
     trayCost := 0
@@ -33,5 +40,19 @@ OPERATIONS
     PRE ID : CLIENTS
     THEN
         result := bool(ID : createdClients)
+    END;
+    
+    registerTray(cc, tt) =
+    PRE cc : CLIENTS & tt : TRAYS & ran(clientTrays) = ran(clientTrays |> {cc}) 
+    THEN
+        cc :: createdClients ||
+        tt :: createdTrays ||
+        clientTrays(tt) := cc
+    END;
+    
+    addDish(tr, dd) =
+    PRE tr : TRAYS & dd : DISHES
+    THEN
+        trayDishes := trayDishes \/ {tr |-> dd}
     END;
 END

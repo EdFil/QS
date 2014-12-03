@@ -19,7 +19,10 @@ INVARIANT
     dishPrices : DISHES --> NAT &
     menus : createdRestaurants <-> {dishPrices} &
     // R8
-    !res.(res: createdRestaurants => (card({res} <| menus) >= 5 & card({res} <| menus) <= 15))
+    !rr.(rr : createdRestaurants => (card({rr} <| menus) >= 5 & card({rr} <| menus) <= 15))
+//    !rr.(rr : createdRestaurants & restaurantVegetarian(rr) = TRUE =>
+//        !dd.(dd : dom(menus(rr)) => dishVegetarian = TRUE))
+        
 INITIALISATION
     dishPrices := {} || menus := {} || createdRestaurants := {} || 
     restaurantNames := {} || restaurantAddresses := {} || restaurantVegetarian := {}
@@ -30,40 +33,75 @@ OPERATIONS
         result := bool(ID : createdRestaurants)
     END;
     
-    registerRestaurant(name, addr, list, restID) =
+    newRestaurant(name, addr, list) =
     PRE
         name : RESTNAMES &
         addr: RESTADDRESSES &
-        list : seq1(dishPrices) &
-        size(list) >= 5 & size(list) <= 15 &
-        restID : RESTAURANTS &
-        restID /: createdRestaurants
+        list : seq1(dishPrices)
     THEN
-        restID :: createdRestaurants ||
-        restaurantNames(restID) := name ||
-        restaurantAddresses(restID) := addr ||
-        restaurantVegetarian(restID) := FALSE ||
-        dishPrices := dishPrices \/ ran(list) ||
-        menus(restID) := ran(list)
+        ANY rr
+        WHERE
+            rr : RESTAURANTS & 
+            rr /: createdRestaurants
+        THEN
+            createdRestaurants := createdRestaurants \/ {rr} ||
+            restaurantNames(rr) := name ||
+            restaurantAddresses(rr) := addr ||
+            restaurantVegetarian(rr) := FALSE ||
+            dishPrices := dishPrices \/ ran(list) ||
+            menus(rr) := ran(list)
+        END
     END;
     
     
-    result <-- dishInMenu(dishID) =
+    result <-- isDishInAnyMenu(dishID) =
     PRE
         dishID : DISHES
     THEN
         result := bool(dishID : dom(dishPrices))
     END;
 
+//CENAS QUE FIZ
     
-    result <-- getPrice(rr, dd) =
+    result <-- getDishPrice(rr, dd) =
     PRE 
-        rr : RESTAURANTS & dd : DISHES
+        rr : createdRestaurants & dd : dom(menus(rr))
     THEN
-        result := TRUE
+        result := menus(rr)(dd) // (todos os menus do rr) -> preço do dd
        // result := menuPrices({rr} * {dd})
        // result := menuPrices(menus(rr))
        // result := ran(({rr} <| menus /\ menus |> {dd} ) <| menuPrices)
     END;
+    
+    changePrice(rr, dd, pp) = 
+    PRE
+        rr : createdRestaurants & dd : dom(menus(rr)) & pp : NAT
+    THEN
+        menus(rr)(dd) := pp
+    END;
         
+    addDishToRestaurant(rr, dd, pp) = 
+    PRE rr : createdRestaurants &
+        dd : DISHES &
+        pp : NAT
+    THEN
+        IF dd : dom(menus(rr))
+        THEN
+            menus(rr)(dd) := pp //If dish already exists update its price
+        ELSE
+            menus(rr) := menus(rr) \/ { dd |-> pp } //If fish doesn't exist, add {dish --> price}
+        END
+    END;
+    
+    removeDishFromRestaurant(rr, dd) =
+    PRE rr : createdRestaurants &
+        dd : dom(menus(rr))
+    THEN
+        menus(rr) := {dd} <<| menus(rr) // Remove dish from dish --> NAT
+    END;
+        
+    
+            
+            
+
 END

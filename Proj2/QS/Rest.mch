@@ -6,112 +6,67 @@ MACHINE
     Rest
 INCLUDES
     Restaurant, Dish, ShoppingTray
+PROMOTES
+    newDish, getDishName, getDishDescription, isVegetarianDish, //PROMOTED DISH OPS
+    newRestaurant
+    
 CONSTANTS
     maxPrice
 PROPERTIES
     maxPrice : NAT
 OPERATIONS
-    //////////////////////////////////// DISH OPERATIONS ////////////////////////////////
-    newDish(name, desc, isVeg) = 
-    PRE name : NAMES & desc : DESCRIPTIONS & isVeg : BOOL
-    THEN
-        ANY dish
-        WHERE
-            dish : DISHES & 
-            checkDishID(dish) = FALSE
-        THEN
-            registerDish(name, desc, isVeg, dish)
-        END
-    END;
-    
-
+    //////////////////////////////////////// DISH OPERATIONS /////////////////////////////////
     removeDish(dd) =
     PRE 
-        dd : DISHES & dishInMenu(dd) = FALSE
+        dd : DISHES & isDishInAnyMenu(dd) = FALSE
     THEN
         deleteDish(dd)
-    END; 
- 
-    
-    name <-- getDishName(dd) =
-    PRE dd : DISHES
-    THEN
-        name := dishNames(dd) 
-    END;
-
-    
-    desc <-- getDishDescription(dd) =
-    PRE dd : DISHES
-    THEN
-        desc := dishDescriptions(dd)
-    END;
-
-
-    bb <--isVegetarianDish(dd) =
-    PRE dd : DISHES
-    THEN
-        bb := dishVegetarian(dd)
     END;
 
    
-   //////////////////////////////////////// RESTAURANT OPERATIONS /////////////////////////////////
-   newRestaurant(name, addr, list) =
-   PRE
-       name : RESTNAMES & addr : RESTADDRESSES & list : seq1(dishPrices)
-   THEN
-       ANY
-           rest
-       WHERE
-           rest : RESTAURANTS &
-           checkRestaurantID(rest) = FALSE
-       THEN
-           registerRestaurant(name, addr, list, rest)
-       END
-   END;
+   //////////////////////////////////////// RESTAURANT OPERATIONS /////////////////////////////////   
+//    pp <-- getDishPrice(rr, dd) =
+//    PRE rr : RESTAURANTS & dd : DISHES & dishInMenu(dd) = TRUE
+//    THEN
+//        pp := menuPrices(menus(dd))
+//    END;
    
    
-    pp <-- getDishPrice(rr, dd) =
-    PRE rr : RESTAURANTS & dd : DISHES & dishInMenu(dd) = TRUE
-    THEN
-        pp := menuPrices(menus(dd))
-    END;
-   
-   
-    setVegetarianRestaurant(rr,bb) =
-    PRE rr : RESTAURANTS & bb : BOOL
-    THEN
-        restaurantVegetarian(rr) := bb
-    END;
+//    setVegetarianRestaurant(rr,bb) =
+//    PRE rr : RESTAURANTS & bb : BOOL
+//    THEN
+//        restaurantVegetarian(rr) := bb
+//    END;
     
     
-    res <-- isVegetarianRestaurant(rr) =
-    PRE rr : RESTAURANTS
-    THEN
-        res := restaurantVegetarian(rr) 
-    END;
+//    res <-- isVegetarianRestaurant(rr) =
+//    PRE rr : RESTAURANTS
+//    THEN
+//        res := restaurantVegetarian(rr) 
+//    END;
     
     
-    name <-- getRestaurantName(rr) =
-    PRE rr : RESTAURANTS
-    THEN
-        name := restaurantNames(rr)
-    END;
+//    name <-- getRestaurantName(rr) =
+//    PRE rr : RESTAURANTS
+//    THEN
+//        name := restaurantNames(rr)
+//    END;
 
     
-    addr <-- getRestaurantAddress(rr) =
-    PRE rr : RESTAURANTS
-    THEN
-        addr := restaurantAddresses(rr)
-    END;
+//    addr <-- getRestaurantAddress(rr) =
+//    PRE rr : RESTAURANTS
+//    THEN
+//        addr := restaurantAddresses(rr)
+//    END;
     
     
 
     
-    ldd <-- getDishRestaurant(rr) =
-    PRE rr : RESTAURANTS 
-    THEN
-        ldd := dom(menus(rr))
-    END;
+//    ldd <-- getDishRestaurant(rr) =
+//    PRE rr : RESTAURANTS 
+//    THEN
+//        ldd := dom(menus(rr))
+//    END;
 
 
     

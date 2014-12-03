@@ -1,4 +1,4 @@
-/* Dish
+    /* Dish
  * Author: Grupo 9
  * Creation date: 28/11/2014
  */
@@ -16,32 +16,44 @@ INVARIANT
 INITIALISATION
     createdDishes := {} || dishNames := {} || dishDescriptions := {} || dishVegetarian := {}
 OPERATIONS
-    result <-- checkDishID(ID) =
-    PRE ID : DISHES
+    newDish(name, desc, isVeg) = 
+    PRE name : NAMES & desc : DESCRIPTIONS & isVeg : BOOL
     THEN
-        result := bool(ID : createdDishes)
+        ANY dd
+        WHERE
+            dd : DISHES & 
+            dd /: createdDishes
+        THEN
+            createdDishes := createdDishes \/ {dd} ||
+            dishNames(dd) := name ||
+            dishDescriptions(dd) := desc ||
+            dishVegetarian(dd) := isVeg
+        END
     END;
     
-    
-    registerDish(name, desc, isVeg, dishID) =
+    deleteDish(dd) =
     PRE
-        name : NAMES &
-        desc : DESCRIPTIONS &
-        isVeg : BOOL &
-        dishID : DISHES &
-        dishID /: createdDishes
+        dd : createdDishes
     THEN
-        dishID :: createdDishes ||
-        //createdDishes := createdDishes \/ {dishID} ||
-        dishNames(dishID) := name ||
-        dishDescriptions(dishID) := desc ||
-        dishVegetarian(dishID) := isVeg
+        createdDishes := createdDishes - {dd}
+    END;
+
+    name <-- getDishName(dd) =
+    PRE
+        dd : createdDishes
+    THEN
+        name := dishNames(dd)
     END;
     
-    deleteDish(dishID) =
-    PRE
-        dishID : DISHES & dishID : createdDishes
+    desc <-- getDishDescription(dd) =
+    PRE dd : createdDishes
     THEN
-        createdDishes := createdDishes - {dishID}
-    END;  
+        desc := dishDescriptions(dd)
+    END;
+
+    bb <--isVegetarianDish(dd) =
+    PRE dd : createdDishes
+    THEN
+        bb := dishVegetarian(dd)
+    END;
 END

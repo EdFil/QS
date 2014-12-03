@@ -1,7 +1,7 @@
 /* Restaurant
- * Author: Grupo 9
- * Creation date: 28/11/2014
- */
+* Author: Grupo 9
+* Creation date: 28/11/2014
+*/
 MACHINE
     Restaurant
 SEES
@@ -20,19 +20,13 @@ INVARIANT
     menus : createdRestaurants <-> {dishPrices} &
     // R8
     !rr.(rr : createdRestaurants => (card({rr} <| menus) >= 5 & card({rr} <| menus) <= 15))
-//    !rr.(rr : createdRestaurants & restaurantVegetarian(rr) = TRUE =>
-//        !dd.(dd : dom(menus(rr)) => dishVegetarian = TRUE))
-        
+    //    !rr.(rr : createdRestaurants & restaurantVegetarian(rr) = TRUE =>
+    //        !dd.(dd : dom(menus(rr)) => dishVegetarian = TRUE))
+    
 INITIALISATION
     dishPrices := {} || menus := {} || createdRestaurants := {} || 
     restaurantNames := {} || restaurantAddresses := {} || restaurantVegetarian := {}
-OPERATIONS
-    result <-- checkRestaurantID(ID) =
-    PRE ID : RESTAURANTS
-    THEN
-        result := bool(ID : createdRestaurants)
-    END;
-    
+OPERATIONS    
     newRestaurant(name, addr, list) =
     PRE
         name : RESTNAMES &
@@ -53,34 +47,7 @@ OPERATIONS
         END
     END;
     
-    
-    result <-- isDishInAnyMenu(dishID) =
-    PRE
-        dishID : DISHES
-    THEN
-        result := bool(dishID : dom(dishPrices))
-    END;
-
-//CENAS QUE FIZ
-    
-    result <-- getDishPrice(rr, dd) =
-    PRE 
-        rr : createdRestaurants & dd : dom(menus(rr))
-    THEN
-        result := menus(rr)(dd) // (todos os menus do rr) -> preço do dd
-       // result := menuPrices({rr} * {dd})
-       // result := menuPrices(menus(rr))
-       // result := ran(({rr} <| menus /\ menus |> {dd} ) <| menuPrices)
-    END;
-    
-    changePrice(rr, dd, pp) = 
-    PRE
-        rr : createdRestaurants & dd : dom(menus(rr)) & pp : NAT
-    THEN
-        menus(rr)(dd) := pp
-    END;
-        
-    addDishToRestaurant(rr, dd, pp) = 
+    addDishToRestaurant2(rr, dd, pp) = 
     PRE rr : createdRestaurants &
         dd : DISHES &
         pp : NAT
@@ -99,9 +66,76 @@ OPERATIONS
     THEN
         menus(rr) := {dd} <<| menus(rr) // Remove dish from dish --> NAT
     END;
-        
     
-            
-            
-
+    changePrice2(rr, dd, pp) = 
+    PRE
+        rr : createdRestaurants & 
+        dd : dom(menus(rr)) & 
+        pp : NAT
+    THEN
+        menus(rr)(dd) := pp
+    END;
+    
+    pp <-- getDishPrice(rr, dd) =
+    PRE 
+        rr : createdRestaurants &
+        dd : dom(menus(rr))
+    THEN
+        pp := menus(rr)(dd) // (todos os menus do rr) -> preço do dd
+    END;
+    
+    setVegetarianRestaurant2(rr, bb) =
+    PRE
+        rr : createdRestaurants &
+        bb : BOOL
+    THEN
+        restaurantVegetarian(rr) := bb
+    END;
+    
+    res <-- isVegetarianRestaurant(rr) =
+    PRE 
+        rr : createdRestaurants
+    THEN
+        res := restaurantVegetarian(rr)
+    END;
+    name <-- getRestaurantName(rr) =
+    PRE 
+        rr : createdRestaurants
+    THEN
+        name := restaurantNames(rr)
+    END;
+    
+    addr <-- getRestaurantAddress(rr) = 
+    PRE
+        rr : createdRestaurants
+    THEN
+        addr := restaurantAddresses(rr)
+    END;
+    
+    lrr <-- getRestaurantsDish(dd) =
+    PRE
+        dd : dom(dishPrices)
+    THEN
+        lrr := seq(menus |> {{dd} <| dishPrices})
+    END;
+    
+    ldd <-- getDishRestaurant(rr) =
+    PRE
+        rr : createdRestaurants
+    THEN
+        ldd := seq(dom(menus(rr)))
+    END;
+    
+    result <-- isDishInAnyMenu(dishID) =
+    PRE
+        dishID : DISHES
+    THEN
+        result := bool(dishID : dom(dishPrices))
+    END;
+    
+    
+    
+    
+    
+    
 END

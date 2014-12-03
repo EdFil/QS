@@ -3,17 +3,16 @@
  * Creation date: 28/11/2014
  */
 MACHINE
-    Rest
+    Rest(maxPrice)
+CONSTRAINTS
+    maxPrice : NAT1
 INCLUDES
     Restaurant, Dish, ShoppingTray
 PROMOTES
-    newDish, getDishName, getDishDescription, isVegetarianDish, //PROMOTED DISH OPS
-    newRestaurant
-    
-CONSTANTS
-    maxPrice
-PROPERTIES
-    maxPrice : NAT
+    //PROMOTED DISH OPS
+    newDish, getDishName, getDishDescription, isVegetarianDish,
+    //PROMOTED RESTAURANT OPS
+    newRestaurant, removeDishFromRestaurant, getDishPrice, isVegetarianRestaurant, getRestaurantName, getRestaurantAddress, getRestaurantsDish, getDishRestaurant
 OPERATIONS
     //////////////////////////////////////// DISH OPERATIONS /////////////////////////////////
     removeDish(dd) =
@@ -23,50 +22,43 @@ OPERATIONS
         deleteDish(dd)
     END;
 
-   
-   //////////////////////////////////////// RESTAURANT OPERATIONS /////////////////////////////////   
-//    pp <-- getDishPrice(rr, dd) =
-//    PRE rr : RESTAURANTS & dd : DISHES & dishInMenu(dd) = TRUE
-//    THEN
-//        pp := menuPrices(menus(dd))
-//    END;
-   
-   
-//    setVegetarianRestaurant(rr,bb) =
-//    PRE rr : RESTAURANTS & bb : BOOL
-//    THEN
-//        restaurantVegetarian(rr) := bb
-//    END;
-    
-    
-//    res <-- isVegetarianRestaurant(rr) =
-//    PRE rr : RESTAURANTS
-//    THEN
-//        res := restaurantVegetarian(rr) 
-//    END;
-    
-    
-//    name <-- getRestaurantName(rr) =
-//    PRE rr : RESTAURANTS
-//    THEN
-//        name := restaurantNames(rr)
-//    END;
+//////////////////////////////////////// RESTAURANT OPERATIONS /////////////////////////////////   
 
-    
-//    addr <-- getRestaurantAddress(rr) =
-//    PRE rr : RESTAURANTS
-//    THEN
-//        addr := restaurantAddresses(rr)
-//    END;
-    
-    
+    addDishToRestaurant(rr, dd, pp) = 
+    PRE rr : createdRestaurants &
+        dd : createdDishes &
+        pp : NAT &
+        pp <= maxPrice
+    THEN
+        addDishToRestaurant2(rr, dd, pp)
+    END;
 
-    
-//    ldd <-- getDishRestaurant(rr) =
-//    PRE rr : RESTAURANTS 
-//    THEN
-//        ldd := dom(menus(rr))
-//    END;
+    changePrice(rr, dd, pp) = 
+    PRE
+        rr : createdRestaurants & 
+        dd : dom(menus(rr)) & 
+        pp : NAT &
+        pp <= maxPrice
+    THEN
+        changePrice2(rr, dd, pp)
+    END;
+
+    setVegetarianRestaurant(rr,bb) =
+    PRE 
+        rr : createdRestaurants & 
+        bb : BOOL
+    THEN
+        SELECT bb = FALSE
+            THEN setVegetarianRestaurant2(rr, bb)
+        WHEN bb = TRUE & !dd.(dd : dom(menus(rr)) => dishVegetarian(dd) = TRUE)
+            THEN setVegetarianRestaurant2(rr, bb)
+        ELSE
+            skip
+        END
+  
+    END;
+
+
 
 
     

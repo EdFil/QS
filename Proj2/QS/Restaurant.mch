@@ -9,19 +9,19 @@ SEES
 SETS
     RESTAURANTS; RESTNAMES; RESTADDRESSES   
 VARIABLES
-    createdRestaurants, restaurantNames, restaurantAddresses, restaurantVegetarian, menus, menuPrices
+    createdRestaurants, restaurantNames, restaurantAddresses, 
+    restaurantVegetarian, menus, dishPrices
 INVARIANT
     createdRestaurants <: RESTAURANTS &
     restaurantNames : createdRestaurants --> RESTNAMES &
     restaurantAddresses : createdRestaurants --> RESTADDRESSES &
     restaurantVegetarian : createdRestaurants --> BOOL &
-    menus : createdRestaurants --> DISHES &
-    menuPrices : menus --> NAT &
-    !res. (res: createdRestaurants => restaurantNames(res) : RESTNAMES) &
+    dishPrices : DISHES --> NAT &
+    menus : createdRestaurants <-> {dishPrices} &
     // R8
     !res.(res: createdRestaurants => (card({res} <| menus) >= 5 & card({res} <| menus) <= 15))
 INITIALISATION
-    menuPrices := {} || menus := {} || createdRestaurants := {} || 
+    dishPrices := {} || menus := {} || createdRestaurants := {} || 
     restaurantNames := {} || restaurantAddresses := {} || restaurantVegetarian := {}
 OPERATIONS
     result <-- checkRestaurantID(ID) =
@@ -30,34 +30,21 @@ OPERATIONS
         result := bool(ID : createdRestaurants)
     END;
     
-    registerRestaurant(name, addr, ldish, lprice, restID) =
+    registerRestaurant(name, addr, list, restID) =
     PRE
         name : RESTNAMES &
         addr: RESTADDRESSES &
-        ldish : iseq1(DISHES) &
-        lprice : iseq1(NAT) &
-        size(ldish) >= 5 & size(ldish) <= 15 &
-        size(lprice) = size(ldish) &
+        list : seq1(dishPrices) &
+        size(list) >= 5 & size(list) <= 15 &
         restID : RESTAURANTS &
         restID /: createdRestaurants
     THEN
         restID :: createdRestaurants ||
         restaurantNames(restID) := name ||
         restaurantAddresses(restID) := addr ||
-        restaurantVegetarian(restID) := FALSE
-       /* WHILE
-            size(lprice) > 0 
-        DO
-            createdRestaurants(restID) := first(ldish) ||
-            //TODO: same for price
-            ldish := tail(ldish) ||
-            lprice := tail(lprice)
-        INVARIANT
-            size(lprice) : NAT1 &
-            size(lprice) > 0
-        VARIANT
-            listSize            
-        END */
+        restaurantVegetarian(restID) := FALSE ||
+        dishPrices := dishPrices \/ ran(list) ||
+        menus(restID) := ran(list)
     END;
     
     
@@ -65,7 +52,7 @@ OPERATIONS
     PRE
         dishID : DISHES
     THEN
-        result := bool(dishID : ran(menus))
+        result := bool(dishID : dom(dishPrices))
     END;
 
     

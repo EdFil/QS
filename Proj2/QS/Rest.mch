@@ -18,10 +18,7 @@ OPERATIONS
         ANY dish
         WHERE
             dish : DISHES & 
-            checkDishID(dish) = FALSE & 
-            checkRestaurantID(dish) = FALSE &
-            checkTrayID(dish) = FALSE &
-            checkClientID(dish) = FALSE
+            checkDishID(dish) = FALSE
         THEN
             registerDish(name, desc, isVeg, dish)
         END
@@ -58,6 +55,28 @@ OPERATIONS
 
    
    //////////////////////////////////////// RESTAURANT OPERATIONS /////////////////////////////////
+   newRestaurant(name, addr, list) =
+   PRE
+       name : RESTNAMES & addr : RESTADDRESSES & list : seq1(dishPrices)
+   THEN
+       ANY
+           rest
+       WHERE
+           rest : RESTAURANTS &
+           checkRestaurantID(rest) = FALSE
+       THEN
+           registerRestaurant(name, addr, list, rest)
+       END
+   END;
+   
+   
+    pp <-- getDishPrice(rr, dd) =
+    PRE rr : RESTAURANTS & dd : DISHES & dishInMenu(dd) = TRUE
+    THEN
+        pp := menuPrices(menus(dd))
+    END;
+   
+   
     setVegetarianRestaurant(rr,bb) =
     PRE rr : RESTAURANTS & bb : BOOL
     THEN
@@ -86,17 +105,14 @@ OPERATIONS
     END;
     
     
+
+    
     ldd <-- getDishRestaurant(rr) =
     PRE rr : RESTAURANTS 
     THEN
-        ldd := menus(rr)
+        ldd := dom(menus(rr))
     END;
-    
-//    pp <-- getDishPrice(rr, dd) =
-//    PRE rr : RESTAURANTS & dd : DISHES & dishInMenu(dd) = TRUE
-//    THEN
-//        pp := menuPrices(menus(dd))
-//    END;
+
 
     
     ///////////////////////////////////// TRAY OPERATIONS ///////////////////////////////////////

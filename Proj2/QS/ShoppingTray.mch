@@ -43,7 +43,7 @@ OPERATIONS
     END;
     
     registerTray(cc, tt) =
-    PRE cc : CLIENTS & tt : TRAYS & ran(clientTrays) = ran(clientTrays |> {cc}) 
+    PRE cc : CLIENTS & tt : TRAYS & ran(clientTrays) = ran(clientTrays |>> {cc}) 
     THEN
         cc :: createdClients ||
         tt :: createdTrays ||

@@ -33,9 +33,9 @@ OPERATIONS
    
     removeDish(dd) =
     PRE 
-        dd : DISHES & isDishInAnyMenu(dd) = FALSE
+        dd : DISHES & isDishInAnyMenu(dd) = FALSE 
     THEN
-        deleteDish(dd)
+        removeDish2(dd)
     END;
 
 //////////////////////////////////////// RESTAURANT OPERATIONS /////////////////////////////////   
@@ -43,7 +43,9 @@ OPERATIONS
     PRE rr : createdRestaurants &
         dd : createdDishes &
         pp : NAT &
-        pp <= maxPrice
+        pp <= maxPrice &
+        (isVegetarianRestaurant(rr) = FALSE or 
+            isVegetarianRestaurant(rr) = isVegetarianDish(dd))
     THEN
         addDishToRestaurant2(rr, dd, pp)
     END;
@@ -76,12 +78,26 @@ OPERATIONS
     
 ///////////////////////////////////// TRAY OPERATIONS ///////////////////////////////////////
 
+    addDishToTray(tr, dd) =
+    PRE tr : createdTrays &
+        dd : dishes &
+        dd /: trayDishes(tr) &
+        status(tr) = OPEN &
+        isDishInAnyMenu(dd) = TRUE
+    THEN
+        addDishToTray2(tr, dd)
+    END;
+
     pp <-- computePriceOfTray(tr) =
     PRE tr : createdTrays
     THEN
-        pp := SIGMA dd . (dd : trayDishes(tr) | min(ran({dd} <| dishPrices)))
+        pp := SIGMA dd . (dd : trayDishes(tr) | min(ran({dd} <| dishPrices))) 
     END;
+    
+    payTray(tr) =
+    PRE tr : createdTrays & status(tr) = CLOSED
+    THEN
+        payTray2(tr, SIGMA dd . (dd : trayDishes(tr) | min(ran({dd} <| dishPrices)))) 
+    END
        
-
-
 END

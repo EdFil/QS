@@ -25,10 +25,12 @@ OPERATIONS
         dishVegetarian(dd) := isVeg
     END;
     
-    deleteDish(dd) =
+    removeDish2(dd) =
     PRE
         dd : createdDishes
     THEN
+        dishNames := {dd} <<| dishNames ||
+        dishDescriptions := {dd} <<| dishDescriptions ||
         createdDishes := createdDishes - {dd}
     END;
 
@@ -49,5 +51,6 @@ OPERATIONS
     PRE dd : createdDishes
     THEN
         bb := dishVegetarian(dd)
-    END;
+    END
+    
 END

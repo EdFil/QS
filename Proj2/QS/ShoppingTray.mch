@@ -18,8 +18,7 @@ INVARIANT
     trayDishes : createdTrays --> {dishes} &
     status : createdTrays --> STATUS &
     numberOfDishes : NAT & numberOfDishes >= 0 &
-    trayCost : NAT &
-    trayCost >= 0
+    trayCost : createdTrays --> NAT  
 INITIALISATION
     dishes := {} ||
     trayDishes := {} ||
@@ -28,7 +27,7 @@ INITIALISATION
     clientTrays := {} ||
     status := createdTrays * {OPEN} ||
     numberOfDishes := 0 ||
-    trayCost := 0
+    trayCost := {}
 OPERATIONS
     result <-- checkTrayID(ID) =
     PRE ID : TRAYS
@@ -70,7 +69,7 @@ OPERATIONS
     END;
     
     
-    addDishToTray(tr, dd) =
+    addDishToTray2(tr, dd) =
     PRE tr : createdTrays & dd : dishes & dd /: trayDishes(tr) & status(tr) = OPEN 
     THEN
         trayDishes(tr) := trayDishes(tr) \/ {dd}
@@ -98,5 +97,12 @@ OPERATIONS
         clientTrays := {tr} <<| clientTrays ||
         createdTrays := createdTrays - {tr}
     END;
+    
+    payTray2(tr,pp) =
+    PRE tr : createdTrays & pp : NAT
+    THEN 
+        status(tr) := PAID ||
+        trayCost(tr) := pp 
+    END
     
 END

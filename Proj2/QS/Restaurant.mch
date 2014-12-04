@@ -49,7 +49,7 @@ OPERATIONS
     
     addDishToRestaurant2(rr, dd, pp) = 
     PRE rr : createdRestaurants &
-        dd : DISHES &
+        dd : createdDishes &
         pp : NAT
     THEN
         IF dd : dom(menus(rr))
@@ -131,11 +131,6 @@ OPERATIONS
         dishID : DISHES
     THEN
         result := bool(dishID : dom(dishPrices))
-    END;
-    
-    
-    
-    
-    
+    END
     
 END

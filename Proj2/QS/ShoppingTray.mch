@@ -46,7 +46,7 @@ OPERATIONS
     newDishInTray(dd) = 
     PRE dd : DISHES & dd /: dishes
     THEN
-        dd :: dishes
+        dishes := dishes \/ {dd}
     END;
        
    
@@ -58,10 +58,13 @@ OPERATIONS
             tt : TRAYS &
             tt /: createdTrays
         THEN
-            IF bool(cc : createdClients) = FALSE
+            IF 
+                bool(cc : createdClients) = FALSE
             THEN
-                cc :: createdClients
-            ELSE skip
+                //cc :: createdClients
+                createdClients := createdClients \/ {cc}
+            ELSE 
+                skip
             END ||
             createdTrays := createdTrays \/ {tt} ||
             clientTrays(tt) := cc

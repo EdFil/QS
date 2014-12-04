@@ -14,7 +14,7 @@ PROMOTES
     //PROMOTED RESTAURANT OPS
     newRestaurant, removeDishFromRestaurant, getDishPrice, isVegetarianRestaurant, getRestaurantName, getRestaurantAddress, getRestaurantsDish, getDishRestaurant,
     // PROMOTED TRAY OPS
-    newTray
+    newTray, removeDishFromTray, checkoutTray, cancelTray
 OPERATIONS
     //////////////////////////////////////// DISH OPERATIONS /////////////////////////////////
     newDish(name, desc, isVeg) =
@@ -33,7 +33,7 @@ OPERATIONS
    
     removeDish(dd) =
     PRE 
-        dd : DISHES & isDishInAnyMenu(dd) = FALSE 
+        dd : DISHES & bool(dd : dom(dishPrices)) = FALSE 
     THEN
         removeDish2(dd)
     END;
@@ -44,8 +44,8 @@ OPERATIONS
         dd : createdDishes &
         pp : NAT &
         pp <= maxPrice &
-        (isVegetarianRestaurant(rr) = FALSE or 
-            isVegetarianRestaurant(rr) = isVegetarianDish(dd))
+        (restaurantVegetarian(rr) = FALSE or 
+            restaurantVegetarian(rr) = dishVegetarian(dd))
     THEN
         addDishToRestaurant2(rr, dd, pp)
     END;
@@ -83,7 +83,7 @@ OPERATIONS
         dd : dishes &
         dd /: trayDishes(tr) &
         status(tr) = OPEN &
-        isDishInAnyMenu(dd) = TRUE
+        bool(dd : dom(dishPrices)) = TRUE
     THEN
         addDishToTray2(tr, dd)
     END;

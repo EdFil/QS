@@ -126,11 +126,11 @@ OPERATIONS
         ldd := seq(dom(menus(rr)))
     END;
     
-    result <-- isDishInAnyMenu(dishID) =
+    result <-- isDishInAnyMenu(dd) =
     PRE
-        dishID : DISHES
+        dd : DISHES
     THEN
-        result := bool(dishID : dom(dishPrices))
+        result := bool(dd : dom(dishPrices))
     END
     
 END

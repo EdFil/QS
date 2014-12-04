@@ -44,8 +44,8 @@ OPERATIONS
     THEN
         desc := dishDescriptions(dd)
     END;
-
-    bb <--isVegetarianDish(dd) =
+ 
+    bb <-- isVegetarianDish(dd) =
     PRE dd : createdDishes
     THEN
         bb := dishVegetarian(dd)

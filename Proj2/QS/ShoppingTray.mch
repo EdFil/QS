@@ -95,7 +95,7 @@ OPERATIONS
     PRE tr : createdTrays & status(tr) /= PAID
     THEN
         trayDishes(tr) := {} ||
-        clientTrays(tr) := clientTrays(tr) <+ {tr |-> {}} ||
+        clientTrays := {tr} <<| clientTrays ||
         createdTrays := createdTrays - {tr}
     END;
     

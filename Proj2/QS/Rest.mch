@@ -76,7 +76,12 @@ OPERATIONS
     
 ///////////////////////////////////// TRAY OPERATIONS ///////////////////////////////////////
 
-    
+    pp <-- computePriceOfTray(tr) =
+    PRE tr : createdTrays
+    THEN
+        pp := SIGMA dd . (dd : trayDishes(tr) | min(ran({dd} <| dishPrices)))
+    END;
+       
 
 
 END

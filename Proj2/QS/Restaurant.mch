@@ -16,7 +16,7 @@ INVARIANT
     restaurantNames : createdRestaurants --> RESTNAMES &
     restaurantAddresses : createdRestaurants --> RESTADDRESSES &
     restaurantVegetarian : createdRestaurants --> BOOL &
-    dishPrices : DISHES --> NAT &
+    dishPrices : DISHES <-> NAT &
     menus : createdRestaurants <-> {dishPrices} &
     // R8
     !rr.(rr : createdRestaurants => (card({rr} <| menus) >= 5 & card({rr} <| menus) <= 15))

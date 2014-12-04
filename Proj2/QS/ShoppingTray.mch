@@ -15,7 +15,7 @@ INVARIANT
     createdClients <: CLIENTS &
     createdTrays <: TRAYS &
     clientTrays : createdTrays --> createdClients & 
-    trayDishes : createdTrays --> dishes &
+    trayDishes : createdTrays --> {dishes} &
     status : createdTrays --> STATUS &
     numberOfDishes : NAT & numberOfDishes >= 0 &
     trayCost : NAT &
@@ -51,8 +51,27 @@ OPERATIONS
     END;
     
     addDish(tr, dd) =
-    PRE tr : TRAYS & dd : DISHES
+    PRE tr : TRAYS & dd : DISHES & status(tr) = OPEN
     THEN
-        trayDishes := trayDishes \/ {tr |-> dd}
+        trayDishes(tr) := trayDishes(tr) \/ {dd}
     END;
+    
+    removeDishFromTray(tr, dd) =
+    PRE dd : dishes & tr : createdTrays & dd : trayDishes(tr) & status(tr) = OPEN
+    THEN 
+        trayDishes(tr) := trayDishes(tr) - {dd}
+    END;
+    
+    checkoutTray(tr) =
+    PRE tr : createdTrays & status(tr) = OPEN
+    THEN
+        status(tr) := CLOSED
+    END;
+    
+    cancelTray(tr) =
+    PRE tr : createdTrays & status(tr) /= PAID
+    THEN
+        createdTrays := createdTrays - {tr}
+    END;
+    
 END

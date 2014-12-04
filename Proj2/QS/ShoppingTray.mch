@@ -36,31 +36,53 @@ OPERATIONS
         result := bool(ID : createdTrays)
     END;
     
+    
     result <-- checkClientID(ID) =
     PRE ID : CLIENTS
     THEN
         result := bool(ID : createdClients)
     END;
     
-    registerTray(cc, tt) =
-    PRE cc : CLIENTS & tt : TRAYS & ran(clientTrays) = ran(clientTrays |>> {cc}) 
+    
+    newDishInTray(dd) = 
+    PRE dd : DISHES & dd /: dishes
     THEN
-        cc :: createdClients ||
-        tt :: createdTrays ||
-        clientTrays(tt) := cc
+        dd :: dishes
+    END;
+       
+   
+    newTray(cc) =
+    PRE cc : CLIENTS //Se cada client só puder ter uma tray OPEN, falta fazer essa verificação
+    THEN
+        ANY tt
+        WHERE
+            tt : TRAYS &
+            tt /: createdTrays
+        THEN
+            IF bool(cc : createdClients) = FALSE
+            THEN
+                cc :: createdClients
+            ELSE skip
+            END ||
+            createdTrays := createdTrays \/ {tt} ||
+            clientTrays(tt) := cc
+        END
     END;
     
-    addDish(tr, dd) =
-    PRE tr : TRAYS & dd : DISHES & status(tr) = OPEN
+    
+    addDishToTray(tr, dd) =
+    PRE tr : createdTrays & dd : dishes & dd /: trayDishes(tr) & status(tr) = OPEN 
     THEN
         trayDishes(tr) := trayDishes(tr) \/ {dd}
     END;
     
+    
     removeDishFromTray(tr, dd) =
-    PRE dd : dishes & tr : createdTrays & dd : trayDishes(tr) & status(tr) = OPEN
+    PRE tr : createdTrays & dd : trayDishes(tr) & status(tr) = OPEN
     THEN 
         trayDishes(tr) := trayDishes(tr) - {dd}
     END;
+
     
     checkoutTray(tr) =
     PRE tr : createdTrays & status(tr) = OPEN
@@ -68,9 +90,12 @@ OPERATIONS
         status(tr) := CLOSED
     END;
     
+    
     cancelTray(tr) =
     PRE tr : createdTrays & status(tr) /= PAID
     THEN
+        trayDishes(tr) := {} ||
+        clientTrays(tr) := clientTrays(tr) <+ {tr |-> {}} ||
         createdTrays := createdTrays - {tr}
     END;
     

@@ -16,19 +16,13 @@ INVARIANT
 INITIALISATION
     createdDishes := {} || dishNames := {} || dishDescriptions := {} || dishVegetarian := {}
 OPERATIONS
-    newDish(name, desc, isVeg) = 
-    PRE name : NAMES & desc : DESCRIPTIONS & isVeg : BOOL
+    newDish2(name, desc, isVeg, dd) = 
+    PRE name : NAMES & desc : DESCRIPTIONS & isVeg : BOOL & dd : DISHES & dd /: createdDishes
     THEN
-        ANY dd
-        WHERE
-            dd : DISHES & 
-            dd /: createdDishes
-        THEN
-            createdDishes := createdDishes \/ {dd} ||
-            dishNames(dd) := name ||
-            dishDescriptions(dd) := desc ||
-            dishVegetarian(dd) := isVeg
-        END
+        createdDishes := createdDishes \/ {dd} ||
+        dishNames(dd) := name ||
+        dishDescriptions(dd) := desc ||
+        dishVegetarian(dd) := isVeg
     END;
     
     deleteDish(dd) =

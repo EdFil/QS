@@ -10,11 +10,27 @@ INCLUDES
     Restaurant, Dish, ShoppingTray
 PROMOTES
     //PROMOTED DISH OPS
-    newDish, getDishName, getDishDescription, isVegetarianDish,
+    getDishName, getDishDescription, isVegetarianDish,
     //PROMOTED RESTAURANT OPS
-    newRestaurant, removeDishFromRestaurant, getDishPrice, isVegetarianRestaurant, getRestaurantName, getRestaurantAddress, getRestaurantsDish, getDishRestaurant
+    newRestaurant, removeDishFromRestaurant, getDishPrice, isVegetarianRestaurant, getRestaurantName, getRestaurantAddress, getRestaurantsDish, getDishRestaurant,
+    // PROMOTED TRAY OPS
+    newTray
 OPERATIONS
     //////////////////////////////////////// DISH OPERATIONS /////////////////////////////////
+    newDish(name, desc, isVeg) =
+    PRE name : NAMES & desc : DESCRIPTIONS & isVeg : BOOL
+    THEN
+        ANY dd
+        WHERE
+            dd : DISHES &
+            dd /: createdDishes
+        THEN
+            newDish2(name, desc, isVeg, dd) ||
+            newDishInTray(dd)
+        END
+    END;
+    
+   
     removeDish(dd) =
     PRE 
         dd : DISHES & isDishInAnyMenu(dd) = FALSE
@@ -23,7 +39,6 @@ OPERATIONS
     END;
 
 //////////////////////////////////////// RESTAURANT OPERATIONS /////////////////////////////////   
-
     addDishToRestaurant(rr, dd, pp) = 
     PRE rr : createdRestaurants &
         dd : createdDishes &
@@ -32,6 +47,7 @@ OPERATIONS
     THEN
         addDishToRestaurant2(rr, dd, pp)
     END;
+
 
     changePrice(rr, dd, pp) = 
     PRE
@@ -42,6 +58,7 @@ OPERATIONS
     THEN
         changePrice2(rr, dd, pp)
     END;
+
 
     setVegetarianRestaurant(rr,bb) =
     PRE 
@@ -54,34 +71,11 @@ OPERATIONS
             THEN setVegetarianRestaurant2(rr, bb)
         ELSE
             skip
-        END
-  
-    END;
-
-
-
-
-    
-    ///////////////////////////////////// TRAY OPERATIONS ///////////////////////////////////////
-        // ver se o cliente pode ter apenas uma tray
-    newTray(cc) =
-    PRE cc : CLIENTS
-    THEN
-        ANY tray
-        WHERE
-            tray : TRAYS &
-            checkTrayID(tray) = FALSE 
-        THEN
-            registerTray(cc,tray)
-        END
+        END  
     END;
     
-    
-    addDishToTray(tr,dd) =
-    PRE tr : TRAYS & dd : DISHES
-    THEN
-        addDish(tr,dd)
-    END;
+///////////////////////////////////// TRAY OPERATIONS ///////////////////////////////////////
+
     
 
 

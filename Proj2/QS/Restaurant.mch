@@ -29,12 +29,16 @@ OPERATIONS
     PRE
         name : RESTNAMES &
         addr: RESTADDRESSES &
-        list : seq1(dishPrices)
+        list : seq1(dishPrices) &
+        ran(list) : DISHES <-> NAT &
+        card(ran(list)) >= 5 &
+        card(ran(list)) <= 15
     THEN
         ANY rr
         WHERE
             rr : RESTAURANTS & 
-            rr /: createdRestaurants
+            rr /: createdRestaurants &
+            rr /: {}
         THEN
             createdRestaurants := createdRestaurants \/ {rr} ||
             restaurantNames(rr) := name ||
@@ -48,7 +52,8 @@ OPERATIONS
     addDishToRestaurant2(rr, dd, pp) = 
     PRE rr : createdRestaurants &
         dd : DISHES &
-        pp : NAT
+        pp : NAT &
+        card(menus(rr)) < 15
     THEN
         IF dd : dom(menus(rr))
         THEN

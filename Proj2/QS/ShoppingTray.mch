@@ -15,7 +15,7 @@ INVARIANT
     createdClients <: CLIENTS &
     createdTrays <: TRAYS &
     clientTrays : createdTrays --> createdClients & 
-    trayDishes : createdTrays --> {dishes} &
+    trayDishes : createdTrays +-> {dishes} &
     status : createdTrays --> STATUS &
     trayCost : createdTrays +-> NAT  
 INITIALISATION
@@ -24,7 +24,7 @@ INITIALISATION
     createdClients := {} ||
     createdTrays := {} ||
     clientTrays := {} ||
-    status := createdTrays * {OPEN} ||
+    status := {} ||
     trayCost := {}
 OPERATIONS          
     newTray(cc) =
@@ -41,6 +41,7 @@ OPERATIONS
                 createdClients := createdClients \/ {cc}
             END ||
             createdTrays := createdTrays \/ {tt} ||
+            status(tt) := OPEN ||
             clientTrays(tt) := cc
         END
     END;

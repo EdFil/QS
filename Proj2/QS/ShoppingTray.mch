@@ -9,7 +9,7 @@ SEES
 SETS
     TRAYS; CLIENTS; STATUS = {OPEN, CLOSED, PAID}
 VARIABLES
-    createdTrays, status, numberOfDishes, trayCost, createdClients, clientTrays, dishes, trayDishes
+    createdTrays, status, trayCost, createdClients, clientTrays, dishes, trayDishes
 INVARIANT
     dishes <: DISHES &
     createdClients <: CLIENTS &
@@ -17,8 +17,7 @@ INVARIANT
     clientTrays : createdTrays --> createdClients & 
     trayDishes : createdTrays --> {dishes} &
     status : createdTrays --> STATUS &
-    numberOfDishes : NAT & numberOfDishes >= 0 &
-    trayCost : createdTrays --> NAT  
+    trayCost : createdTrays +-> NAT  
 INITIALISATION
     dishes := {} ||
     trayDishes := {} ||
@@ -26,15 +25,8 @@ INITIALISATION
     createdTrays := {} ||
     clientTrays := {} ||
     status := createdTrays * {OPEN} ||
-    numberOfDishes := 0 ||
     trayCost := {}
-OPERATIONS    
-    newDishInTray(dd) = // <---
-    PRE dd : DISHES & dd /: dishes
-    THEN
-        dishes := dishes \/ {dd}
-    END;
-      
+OPERATIONS          
     newTray(cc) =
     PRE cc : CLIENTS //Se cada client só puder ter uma tray OPEN, falta fazer essa verificação
     THEN
@@ -46,17 +38,19 @@ OPERATIONS
             IF 
                 bool(cc : createdClients) = FALSE
             THEN
-                //cc :: createdClients
                 createdClients := createdClients \/ {cc}
-            ELSE 
-                skip
             END ||
             createdTrays := createdTrays \/ {tt} ||
             clientTrays(tt) := cc
         END
     END;
     
-    
+    newDishInTray(dd) =
+    PRE dd : createdDishes & dd /: dishes
+    THEN
+        dishes := dishes \/ {dd}
+    END;
+
     addDishToTray2(tr, dd) =
     PRE 
         tr : createdTrays & 
@@ -92,7 +86,8 @@ OPERATIONS
     
     payTray2(tr,pp) =
     PRE tr : createdTrays & pp : NAT
-    THEN 
+    THEN
+        trayDishes := {tr} <<| trayDishes ||
         status(tr) := PAID ||
         trayCost(tr) := pp 
     END

@@ -33,7 +33,9 @@ OPERATIONS
    
     removeDish(dd) =
     PRE 
-        dd : DISHES & bool(dd : dom(dishPrices)) = FALSE 
+        dd : createdDishes &
+        dd /: dom(dishPrices) &
+        !dt.(dt : trayDishes~[{{dd}}] => card(({dt} <| status) |>> {PAID}) = 0)
     THEN
         removeDish2(dd)
     END;
@@ -66,16 +68,16 @@ OPERATIONS
     PRE 
         rr : createdRestaurants & 
         bb : BOOL &
-        (bb = TRUE) => !dd.(dd : dom(menus(rr)) => dishVegetarian(dd) = TRUE)
+        (bb = TRUE) => !dd.(dd : DISHES  => dishVegetarian(dd) = TRUE)
     THEN 
         setVegetarianRestaurant2(rr, bb)
     END;
     
 ///////////////////////////////////// TRAY OPERATIONS ///////////////////////////////////////
 
-    addDishToTray(tr, dd) = // <---
+    addDishToTray(tr, dd) =
     PRE tr : createdTrays &
-        dd : dishes & // <---
+        dd : dishes &
         dd /: trayDishes(tr) &
         status(tr) = OPEN &
         bool(dd : dom(dishPrices)) = TRUE
@@ -92,7 +94,7 @@ OPERATIONS
     payTray(tr) =
     PRE tr : createdTrays & status(tr) = CLOSED
     THEN
-        payTray2(tr, computePriceOfTray(tr)) // <--- 
-    END
+        payTray2(tr, SIGMA dd . (dd : trayDishes(tr) | min(ran({dd} <| dishPrices)))) // <--- 
+    END;
        
 END

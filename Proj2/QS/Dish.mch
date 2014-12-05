@@ -31,7 +31,7 @@ OPERATIONS
     THEN
         dishNames := {dd} <<| dishNames ||
         dishDescriptions := {dd} <<| dishDescriptions ||
-        dishVegetarian := {dd} <<| dishVegetarian || // <---
+        dishVegetarian := {dd} <<| dishVegetarian ||
         createdDishes := createdDishes - {dd}
     END;
 
@@ -52,6 +52,5 @@ OPERATIONS
     PRE dd : createdDishes
     THEN
         bb := dishVegetarian(dd)
-    END;
-    
+    END
 END

@@ -17,7 +17,13 @@ INITIALISATION
     createdDishes := {} || dishNames := {} || dishDescriptions := {} || dishVegetarian := {}
 OPERATIONS
     newDish2(name, desc, isVeg, dd) = 
-    PRE name : NAMES & desc : DESCRIPTIONS & isVeg : BOOL & dd : DISHES & dd /: createdDishes
+    PRE 
+        name : NAMES &
+        name /: ran(dishNames) &
+        desc : DESCRIPTIONS &
+        isVeg : BOOL &
+        dd : DISHES & 
+        dd /: createdDishes
     THEN
         createdDishes := createdDishes \/ {dd} ||
         dishNames(dd) := name ||

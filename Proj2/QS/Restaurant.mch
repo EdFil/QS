@@ -47,7 +47,7 @@ OPERATIONS
     
     addDishToRestaurant2(rr, dd, pp) = 
     PRE rr : createdRestaurants &
-        dd : createdDishes &
+        dd : DISHES &
         pp : NAT
     THEN
         IF dd : dom(menus(rr))

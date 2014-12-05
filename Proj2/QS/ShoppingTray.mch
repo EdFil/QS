@@ -28,28 +28,13 @@ INITIALISATION
     status := createdTrays * {OPEN} ||
     numberOfDishes := 0 ||
     trayCost := {}
-OPERATIONS
-    result <-- checkTrayID(ID) =
-    PRE ID : TRAYS
-    THEN
-        result := bool(ID : createdTrays)
-    END;
-    
-    
-    result <-- checkClientID(ID) =
-    PRE ID : CLIENTS
-    THEN
-        result := bool(ID : createdClients)
-    END;
-    
-    
-    newDishInTray(dd) = 
+OPERATIONS    
+    newDishInTray(dd) = // <---
     PRE dd : DISHES & dd /: dishes
     THEN
         dishes := dishes \/ {dd}
     END;
-       
-   
+      
     newTray(cc) =
     PRE cc : CLIENTS //Se cada client só puder ter uma tray OPEN, falta fazer essa verificação
     THEN
@@ -73,7 +58,11 @@ OPERATIONS
     
     
     addDishToTray2(tr, dd) =
-    PRE tr : createdTrays & dd : dishes & dd /: trayDishes(tr) & status(tr) = OPEN 
+    PRE 
+        tr : createdTrays & 
+        dd : dishes &
+        dd /: trayDishes(tr) &
+        status(tr) = OPEN 
     THEN
         trayDishes(tr) := trayDishes(tr) \/ {dd}
     END;

@@ -20,9 +20,9 @@ INVARIANT
     menus : createdRestaurants <-> {dishPrices} &
     // R8
     !rr.(rr : createdRestaurants => (card({rr} <| menus) >= 5 & card({rr} <| menus) <= 15))
-    //    !rr.(rr : createdRestaurants & restaurantVegetarian(rr) = TRUE =>
-    //        !dd.(dd : dom(menus(rr)) => dishVegetarian = TRUE))
-    
+//    !rr.(rr : createdRestaurants & restaurantVegetarian(rr) = TRUE =>
+//        !dd.(dd : dom(menus(rr)) => getDishVegetarian = TRUE))
+
 INITIALISATION
     dishPrices := {} || menus := {} || createdRestaurants := {} || 
     restaurantNames := {} || restaurantAddresses := {} || restaurantVegetarian := {}

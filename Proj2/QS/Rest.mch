@@ -65,22 +65,17 @@ OPERATIONS
     setVegetarianRestaurant(rr,bb) =
     PRE 
         rr : createdRestaurants & 
-        bb : BOOL
-    THEN
-        SELECT bb = FALSE
-            THEN setVegetarianRestaurant2(rr, bb)
-        WHEN bb = TRUE & !dd.(dd : dom(menus(rr)) => dishVegetarian(dd) = TRUE)
-            THEN setVegetarianRestaurant2(rr, bb)
-        ELSE
-            skip
-        END  
+        bb : BOOL &
+        (bb = TRUE) => !dd.(dd : dom(menus(rr)) => dishVegetarian(dd) = TRUE)
+    THEN 
+        setVegetarianRestaurant2(rr, bb)
     END;
     
 ///////////////////////////////////// TRAY OPERATIONS ///////////////////////////////////////
 
-    addDishToTray(tr, dd) =
+    addDishToTray(tr, dd) = // <---
     PRE tr : createdTrays &
-        dd : dishes &
+        dd : dishes & // <---
         dd /: trayDishes(tr) &
         status(tr) = OPEN &
         bool(dd : dom(dishPrices)) = TRUE
@@ -97,7 +92,7 @@ OPERATIONS
     payTray(tr) =
     PRE tr : createdTrays & status(tr) = CLOSED
     THEN
-        payTray2(tr, SIGMA dd . (dd : trayDishes(tr) | min(ran({dd} <| dishPrices)))) 
+        payTray2(tr, computePriceOfTray(tr)) // <--- 
     END
        
 END
